@@ -12,6 +12,7 @@ const courtButtons = document.querySelectorAll('[data-court]');
 const summaryCourt = document.getElementById('summaryCourt');
 const summaryTime = document.getElementById('summaryTime');
 const summaryTotal = document.getElementById('summaryTotal');
+const noHpInput = form?.querySelector('input[name="no_hp"]');
 const startHour = 6;
 const endHour = 24;
 
@@ -116,7 +117,7 @@ function getFormPayload() {
   const fd = new FormData(form);
   return {
     nama: (fd.get('nama') || '').toString().trim(),
-    no_hp: (fd.get('no_hp') || '').toString().trim(),
+    no_hp: (fd.get('no_hp') || '').toString().trim().replace(/\D/g, ''),
     lapangan: (fd.get('lapangan') || '').toString().trim(),
     tanggal_sewa: (fd.get('tanggal_sewa') || '').toString().trim(),
     jam_mulai: (fd.get('jam_mulai') || '').toString().trim(),
@@ -141,6 +142,17 @@ function updateSummary(totalText = null) {
   if (totalText) {
     summaryTotal.textContent = totalText;
   }
+}
+
+// Pastikan nomor HP hanya berisi digit saat diketik/paste.
+function enforceNumericPhoneInput() {
+  if (!noHpInput) {
+    return;
+  }
+
+  noHpInput.addEventListener('input', () => {
+    noHpInput.value = noHpInput.value.replace(/\D+/g, '');
+  });
 }
 
 // Sinkronkan kartu lapangan aktif dengan nilai select lapangan.
@@ -296,6 +308,7 @@ btnPesan.addEventListener('click', handlePesan);
 btnRefresh.addEventListener('click', loadBookings);
 
 // Inisialisasi awal halaman.
+enforceNumericPhoneInput();
 buildJamOptions();
 setActiveCourt('Lapangan A');
 loadBookings();

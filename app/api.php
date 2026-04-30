@@ -39,6 +39,8 @@ function validateAndCalculate(array $input, array $lapanganOptions): array
 
     if ($noHp === '') {
         $errors[] = 'Nomor HP wajib diisi.';
+    } elseif (!ctype_digit($noHp)) {
+        $errors[] = 'Nomor HP hanya boleh berisi angka.';
     }
 
     if (!in_array($lapangan, $lapanganOptions, true)) {
@@ -93,6 +95,7 @@ function validateAndCalculate(array $input, array $lapanganOptions): array
     }
 
     $durasi = (int) (($jamSelesaiMenit - $jamMulaiMenit) / 60);
+    // Check day of week: 1 (Monday) to 5 (Friday) = 350.000, else (Saturday & Sunday) = 500.000
     $dayOfWeek = (int) $tanggalObj->format('N');
     $hargaPerJam = ($dayOfWeek >= 1 && $dayOfWeek <= 5) ? 350000 : 500000;
     $totalTagihan = $durasi * $hargaPerJam;
