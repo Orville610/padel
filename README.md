@@ -2,10 +2,14 @@
 
 Aplikasi web sederhana untuk pemesanan lapangan padel menggunakan:
 - PHP native + `mysqli` (backend API)
-- MySQL (database server rumah)
+- MySQL (berjalan otomatis di Docker Compose)
 - HTML + Tailwind CSS (frontend)
 - JavaScript vanilla (interaksi form, hitung, simpan, dan daftar pesanan)
 - Docker (runtime aplikasi)
+
+## Mockup UI
+
+![Mockup UI](mockup-ui.png)
 
 ## Struktur File
 
@@ -21,23 +25,26 @@ Aplikasi web sederhana untuk pemesanan lapangan padel menggunakan:
 
 ## Konfigurasi Database
 
-Edit file `.env`:
+Secara default database sudah dibuat oleh Docker Compose, jadi tidak perlu install MySQL di host.
+
+Konfigurasi default:
 
 ```env
-DB_HOST=100.117.101.88
+DB_HOST=mysql
 DB_PORT=3306
 DB_USER=padel
-DB_PASSWORD=isi_password_database
+DB_PASSWORD=padel_password
 DB_NAME=db_pemesanan
 ```
 
 Catatan:
-- `DB_HOST` harus mengarah ke server MySQL yang benar.
-- MySQL server harus mengizinkan koneksi remote dari laptop/host Docker.
+- Service MySQL bernama `mysql`.
+- Data database disimpan di volume Docker `mysql-data`.
+- Tabel `pemesanan` dibuat otomatis saat container aplikasi start.
 
 ## Setup Tabel
 
-Jalankan isi `table.sql` pada database yang sudah ada (tanpa membuat database baru):
+File `table.sql` tetap disediakan untuk dokumentasi struktur tabel. Saat memakai Docker Compose, file ini dijalankan otomatis oleh container PHP saat aplikasi start.
 
 ```sql
 CREATE TABLE IF NOT EXISTS pemesanan (
@@ -57,7 +64,13 @@ CREATE TABLE IF NOT EXISTS pemesanan (
 
 ## Jalankan Dengan Docker
 
-Di folder project:
+Mode Docker ini melakukan `git clone` dari GitHub saat image dibuat. Jadi folder kiriman cukup berisi `Dockerfile` dan `docker-compose.yml`.
+
+Docker Compose akan menjalankan:
+- `padel-web`: aplikasi PHP native.
+- `mysql`: database MySQL internal.
+
+Di folder yang berisi `Dockerfile` dan `docker-compose.yml`:
 
 ```bash
 docker compose up -d --build

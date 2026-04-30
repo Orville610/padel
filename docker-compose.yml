@@ -1,9 +1,40 @@
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: padel-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root_padel_password
+      MYSQL_DATABASE: db_pemesanan
+      MYSQL_USER: padel
+      MYSQL_PASSWORD: padel_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot_padel_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
   padel-web:
-    build: .
+    build:
+      context: .
+      args:
+        REPO_URL: https://github.com/Orville610/padel.git
+        REPO_BRANCH: main
     container_name: padel-web
+    depends_on:
+      mysql:
+        condition: service_healthy
     ports:
       - "8000:8000"
-    volumes:
-      - ./:/var/www/html
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: padel
+      DB_PASSWORD: padel_password
+      DB_NAME: db_pemesanan
     restart: unless-stopped
+
+volumes:
+  mysql-data:
