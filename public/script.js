@@ -56,10 +56,12 @@ function buildJamOptions() {
   syncJamSelesaiOptions();
 }
 
+// Ambil angka jam dari string HH:mm (contoh "08:00" -> 8).
 function timeToHour(timeText) {
   return Number.parseInt((timeText || '00:00').split(':')[0], 10);
 }
 
+// Sesuaikan opsi jam selesai agar selalu lebih besar dari jam mulai.
 function syncJamSelesaiOptions() {
   const mulaiHour = timeToHour(jamMulaiSelect.value);
   const oldSelesai = jamSelesaiSelect.value;
