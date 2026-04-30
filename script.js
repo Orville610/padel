@@ -12,6 +12,8 @@ const courtButtons = document.querySelectorAll('[data-court]');
 const summaryCourt = document.getElementById('summaryCourt');
 const summaryTime = document.getElementById('summaryTime');
 const summaryTotal = document.getElementById('summaryTotal');
+const startHour = 6;
+const endHour = 24;
 
 // Escape karakter HTML agar data user aman saat dirender ke DOM.
 function escapeHtml(value) {
@@ -26,7 +28,7 @@ function escapeHtml(value) {
 // Isi dropdown jam booking: 06:00 sampai 24:00 (kelipatan 1 jam).
 function buildJamOptions() {
   const jamList = [];
-  for (let h = 6; h <= 24; h += 1) {
+  for (let h = startHour; h <= endHour; h += 1) {
     jamList.push(`${String(h).padStart(2, '0')}:00`);
   }
 
@@ -51,6 +53,33 @@ function buildJamOptions() {
 
   jamMulaiSelect.value = '06:00';
   jamSelesaiSelect.value = '08:00';
+  syncJamSelesaiOptions();
+}
+
+function timeToHour(timeText) {
+  return Number.parseInt((timeText || '00:00').split(':')[0], 10);
+}
+
+function syncJamSelesaiOptions() {
+  const mulaiHour = timeToHour(jamMulaiSelect.value);
+  const oldSelesai = jamSelesaiSelect.value;
+  const nextSelesai = [];
+
+  for (let h = mulaiHour + 1; h <= endHour; h += 1) {
+    nextSelesai.push(`${String(h).padStart(2, '0')}:00`);
+  }
+
+  jamSelesaiSelect.innerHTML = '';
+  nextSelesai.forEach((jam) => {
+    const opt = document.createElement('option');
+    opt.value = jam;
+    opt.textContent = jam;
+    jamSelesaiSelect.appendChild(opt);
+  });
+
+  if (nextSelesai.includes(oldSelesai)) {
+    jamSelesaiSelect.value = oldSelesai;
+  }
 }
 
 // Menampilkan notifikasi toast sukses/gagal di kanan atas.
@@ -251,6 +280,15 @@ form.addEventListener('change', () => {
 });
 
 lapanganSelect.addEventListener('change', () => setActiveCourt(lapanganSelect.value));
+jamMulaiSelect.addEventListener('change', () => {
+  syncJamSelesaiOptions();
+  summaryTotal.textContent = 'Klik Hitung';
+  updateSummary();
+});
+jamSelesaiSelect.addEventListener('change', () => {
+  summaryTotal.textContent = 'Klik Hitung';
+  updateSummary();
+});
 btnHitung.addEventListener('click', handleHitung);
 btnPesan.addEventListener('click', handlePesan);
 btnRefresh.addEventListener('click', loadBookings);
