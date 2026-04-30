@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemesanan Lapangan Padel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfeff',
+                            100: '#cffafe',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            700: '#0e7490',
+                            900: '#164e63'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-cyan-50 via-slate-50 to-amber-50 text-slate-800">
+    <div class="mx-auto w-[min(1160px,96%)] py-6 md:py-10">
+        <header class="mb-5 flex flex-col gap-4 lg:mb-7 lg:flex-row lg:items-end lg:justify-between">
+            <div class="flex items-start gap-3">
+                <img src="logo.png" alt="Logo Padel" class="h-14 w-14 rounded-lg border border-slate-200 bg-white object-contain p-1 shadow-sm md:h-16 md:w-16">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">Padel Court Booking</p>
+                    <h1 class="mt-2 text-3xl font-black leading-tight text-slate-900 md:text-4xl">Pemesanan Lapangan Padel</h1>
+                    <p class="mt-2 text-sm text-slate-600 md:text-base">Reservasi lapangan cepat, hitung otomatis, simpan langsung ke database.</p>
+                </div>
+            </div>
+
+            <div class="grid gap-2 text-sm sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-3" aria-label="Informasi tarif">
+                <span class="rounded-full border border-cyan-200 bg-white px-3 py-2">Senin-Jumat <strong>Rp350.000/jam</strong></span>
+                <span class="rounded-full border border-amber-200 bg-white px-3 py-2">Sabtu-Minggu <strong>Rp500.000/jam</strong></span>
+                <span class="rounded-full border border-slate-200 bg-white px-3 py-2">Jam sewa <strong>06:00-24:00</strong></span>
+            </div>
+        </header>
+
+        <section class="mb-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-lg border border-cyan-200 bg-cyan-50/70 p-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-cyan-700">Tarif Kerja</p>
+                <p class="mt-1 text-lg font-black text-cyan-900">Rp350.000</p>
+            </div>
+            <div class="rounded-lg border border-amber-200 bg-amber-50/80 p-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-amber-700">Tarif Weekend</p>
+                <p class="mt-1 text-lg font-black text-amber-900">Rp500.000</p>
+            </div>
+            <div class="rounded-lg border border-slate-200 bg-white p-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Slot Mulai</p>
+                <p class="mt-1 text-lg font-black text-slate-900">06:00</p>
+            </div>
+            <div class="rounded-lg border border-slate-200 bg-white p-3">
+                <p class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Slot Akhir</p>
+                <p class="mt-1 text-lg font-black text-slate-900">24:00</p>
+            </div>
+        </section>
+
+        <div id="toastContainer" class="pointer-events-none fixed right-4 top-4 z-50 flex w-[min(92vw,360px)] flex-col gap-2"></div>
+
+        <main class="grid gap-4 lg:grid-cols-[1.7fr,0.8fr] lg:gap-5">
+            <section class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+                <div class="mb-5 flex items-start justify-between gap-4">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-brand-700">Form Booking</p>
+                        <h2 class="mt-2 text-xl font-extrabold text-slate-900">Detail Pemesanan</h2>
+                    </div>
+                </div>
+
+                <form id="bookingForm">
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-700">Nama Pemesan</span>
+                            <input class="h-11 w-full rounded-lg border border-slate-300 px-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" type="text" name="nama" placeholder="Contoh: Rafi" required>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-700">Nomor HP</span>
+                            <input class="h-11 w-full rounded-lg border border-slate-300 px-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" type="text" name="no_hp" placeholder="Contoh: 081234567890" required>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-700">Tanggal Sewa</span>
+                            <input class="h-11 w-full rounded-lg border border-slate-300 px-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" type="date" name="tanggal_sewa" required>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-700">Lapangan</span>
+                            <select class="h-11 w-full rounded-lg border border-slate-300 px-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" name="lapangan" id="lapanganSelect" required>
+                                <option value="Lapangan A">Lapangan A</option>
+                                <option value="Lapangan B">Lapangan B</option>
+                                <option value="Lapangan C">Lapangan C</option>
+                            </select>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-700">Jam Mulai</span>
+                            <select class="h-11 w-full rounded-lg border border-slate-300 px-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" name="jam_mulai" id="jamMulai" required></select>
+                        </label>
+
+                        <label class="block">
+                            <span class="mb-2 block text-sm font-semibold text-slate-700">Jam Selesai</span>
+                            <select class="h-11 w-full rounded-lg border border-slate-300 px-3 outline-none transition focus:border-brand-500 focus:ring-4 focus:ring-brand-100" name="jam_selesai" id="jamSelesai" required></select>
+                        </label>
+                    </div>
+
+                    <div class="mt-5 flex flex-wrap gap-3">
+                        <button type="button" id="btnHitung" class="h-11 rounded-lg border border-slate-300 bg-white px-4 font-bold text-slate-700 transition hover:-translate-y-0.5 hover:bg-slate-50">Hitung Total</button>
+                        <button type="button" id="btnPesan" class="h-11 rounded-lg bg-brand-600 px-5 font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-brand-700">Simpan Pesanan</button>
+                    </div>
+                </form>
+
+                <div class="mt-5 rounded-lg border border-brand-200 bg-gradient-to-r from-brand-50 to-cyan-50 p-4" id="totalBox" hidden></div>
+            </section>
+
+            <aside class="rounded-lg border border-slate-200 bg-white p-4 shadow-sm md:p-6">
+                <div class="mb-4">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.16em] text-brand-700">Pilih Lapangan</p>
+                        <h2 class="mt-2 text-xl font-extrabold text-slate-900">Area Padel</h2>
+                    </div>
+                </div>
+
+                <div class="grid gap-2.5" id="courtList">
+                    <button type="button" class="court-card rounded-lg border border-brand-300 bg-brand-50 p-3 text-left ring-2 ring-brand-500 transition" data-court="Lapangan A">
+                        <span class="block font-bold text-slate-900">Lapangan A</span>
+                        <span class="mt-1 block text-xs text-slate-600">Indoor - Standard</span>
+                    </button>
+                    <button type="button" class="court-card rounded-lg border border-slate-200 bg-white p-3 text-left transition hover:bg-slate-50" data-court="Lapangan B">
+                        <span class="block font-bold text-slate-900">Lapangan B</span>
+                        <span class="mt-1 block text-xs text-slate-600">Indoor - Premium</span>
+                    </button>
+                    <button type="button" class="court-card rounded-lg border border-slate-200 bg-white p-3 text-left transition hover:bg-slate-50" data-court="Lapangan C">
+                        <span class="block font-bold text-slate-900">Lapangan C</span>
+                        <span class="mt-1 block text-xs text-slate-600">Outdoor - Standard</span>
+                    </button>
+                </div>
+
+                <div class="mt-4 rounded-lg bg-slate-900 p-4 text-slate-100">
+                    <p class="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-slate-400">Ringkasan</p>
+                    <div class="mt-2 flex justify-between gap-3 border-t border-white/15 pt-2">
+                        <span class="text-slate-300">Lapangan</span>
+                        <strong id="summaryCourt" class="text-right">Lapangan A</strong>
+                    </div>
+                    <div class="mt-2 flex justify-between gap-3 border-t border-white/15 pt-2">
+                        <span class="text-slate-300">Jadwal</span>
+                        <strong id="summaryTime" class="text-right">Belum dipilih</strong>
+                    </div>
+                    <div class="mt-2 flex justify-between gap-3 border-t border-white/15 pt-2">
+                        <span class="text-slate-300">Estimasi</span>
+                        <strong id="summaryTotal" class="text-right">Klik Hitung</strong>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <section class="mt-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm md:mt-5 md:p-6">
+            <div class="mb-4 flex items-start justify-between gap-4">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.16em] text-brand-700">Database</p>
+                    <h2 class="mt-2 text-xl font-extrabold text-slate-900">Daftar Pesanan</h2>
+                </div>
+                <button type="button" id="btnRefresh" class="h-9 rounded-lg border border-slate-300 bg-white px-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50">Refresh</button>
+            </div>
+
+            <div class="overflow-x-auto rounded-lg border border-slate-200">
+                <table class="min-w-[860px] w-full border-collapse">
+                    <thead class="text-xs uppercase tracking-[0.08em] text-slate-500">
+                        <tr>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">ID</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">Nama</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">No HP</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">Lapangan</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">Tanggal</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">Jam</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">Durasi</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">Harga/Jam</th>
+                            <th class="border-b border-slate-200 px-3 py-3 text-left">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bookingTableBody">
+                        <tr><td colspan="9" class="px-3 py-4 text-center text-slate-500">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
