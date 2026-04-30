@@ -64,13 +64,13 @@ CREATE TABLE IF NOT EXISTS pemesanan (
 
 ## Jalankan Dengan Docker
 
-Mode Docker ini melakukan `git clone` dari GitHub saat image dibuat. Jadi folder kiriman cukup berisi `Dockerfile` dan `docker-compose.yml`.
+Mode Docker ini build langsung dari source code lokal di repo ini, jadi setiap perubahan terbaru akan ikut ke image saat `docker compose up --build`.
 
 Docker Compose akan menjalankan:
 - `padel-web`: aplikasi PHP native.
 - `mysql`: database MySQL internal.
 
-Di folder yang berisi `Dockerfile` dan `docker-compose.yml`:
+Di root project:
 
 ```bash
 docker compose up -d --build

@@ -1,21 +1,15 @@
-# syntax=docker/dockerfile:1
 FROM php:8.2-cli
-
-ARG REPO_URL="https://github.com/Orville610/padel.git"
-ARG REPO_BRANCH="main"
 
 WORKDIR /var/www/html
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends git ca-certificates \
+    && apt-get install -y --no-install-recommends ca-certificates \
     && docker-php-ext-install mysqli \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone --depth=1 --branch "${REPO_BRANCH}" "${REPO_URL}" /tmp/padel \
-    && cp -a /tmp/padel/. /var/www/html \
-    && rm -rf /tmp/padel /var/www/html/.git
+COPY . /var/www/html
 
-RUN <<'EOF'
+RUN <<'EOS'
 set -eu
 cat > /usr/local/bin/init-table.php <<'PHP'
 <?php
@@ -28,6 +22,7 @@ $deadline = time() + 90;
 
 mysqli_report(MYSQLI_REPORT_OFF);
 
+$lastError = 'unknown';
 do {
     $koneksi = @new mysqli($host, $user, $pass, $name, $port);
     if (!$koneksi->connect_error) {
@@ -46,10 +41,11 @@ do {
         exit(0);
     }
 
+    $lastError = $koneksi->connect_error;
     sleep(2);
 } while (time() < $deadline);
 
-fwrite(STDERR, 'Database tidak siap: ' . $koneksi->connect_error . PHP_EOL);
+fwrite(STDERR, 'Database tidak siap: ' . $lastError . PHP_EOL);
 exit(1);
 PHP
 
@@ -61,7 +57,7 @@ exec php -S 0.0.0.0:8000 -t /var/www/html
 SH
 
 chmod +x /usr/local/bin/start-padel
-EOF
+EOS
 
 EXPOSE 8000
 

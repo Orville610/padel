@@ -19,9 +19,7 @@ services:
   padel-web:
     build:
       context: .
-      args:
-        REPO_URL: https://github.com/Orville610/padel.git
-        REPO_BRANCH: main
+      dockerfile: Dockerfile
     container_name: padel-web
     depends_on:
       mysql:
