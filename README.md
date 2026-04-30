@@ -9,18 +9,17 @@ Aplikasi web sederhana untuk pemesanan lapangan padel menggunakan:
 
 ## Mockup UI
 
-![Mockup UI](mockup-ui.png)
+![Mockup UI](public/mockup-ui.png)
 
 ## Struktur File
 
-- `index.html`: halaman utama (UI frontend).
-- `script.js`: logika frontend (toast alert, hitung, simpan, render tabel).
-- `api.php`: endpoint backend (`list`, `hitung`, `pesan`).
-- `config.php`: loader `.env` dan koneksi database.
-- `table.sql`: query membuat tabel `pemesanan`.
-- `index.php`: redirect ke `index.html`.
-- `pemesanan.php`: redirect ke `index.html`.
-- `Dockerfile`: image PHP + ekstensi `mysqli`.
+- `public/index.html`: halaman utama (UI frontend).
+- `public/script.js`: logika frontend (toast alert, hitung, simpan, render tabel).
+- `public/api.php`: endpoint publik yang meneruskan request ke app layer.
+- `app/api.php`: backend API (`list`, `hitung`, `pesan`).
+- `app/config.php`: loader `.env` dan koneksi database.
+- `database/table.sql`: query membuat tabel `pemesanan`.
+- `docker/Dockerfile`: image PHP + ekstensi `mysqli`.
 - `docker-compose.yml`: jalankan container aplikasi.
 
 ## Konfigurasi Database
@@ -44,7 +43,7 @@ Catatan:
 
 ## Setup Tabel
 
-File `table.sql` tetap disediakan untuk dokumentasi struktur tabel. Saat memakai Docker Compose, file ini dijalankan otomatis oleh container PHP saat aplikasi start.
+File `database/table.sql` tetap disediakan untuk dokumentasi struktur tabel. Saat memakai Docker Compose, file ini dijalankan otomatis oleh container PHP saat aplikasi start.
 
 ```sql
 CREATE TABLE IF NOT EXISTS pemesanan (

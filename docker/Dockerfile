@@ -26,7 +26,7 @@ $lastError = 'unknown';
 do {
     $koneksi = @new mysqli($host, $user, $pass, $name, $port);
     if (!$koneksi->connect_error) {
-        $sql = file_get_contents('/var/www/html/table.sql');
+        $sql = file_get_contents('/var/www/html/database/table.sql');
         if ($sql !== false && trim($sql) !== '') {
             if (!$koneksi->multi_query($sql)) {
                 fwrite(STDERR, 'Gagal membuat tabel: ' . $koneksi->error . PHP_EOL);
@@ -53,7 +53,7 @@ cat > /usr/local/bin/start-padel <<'SH'
 #!/bin/sh
 set -e
 php /usr/local/bin/init-table.php
-exec php -S 0.0.0.0:8000 -t /var/www/html
+exec php -S 0.0.0.0:8000 -t /var/www/html/public
 SH
 
 chmod +x /usr/local/bin/start-padel

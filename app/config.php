@@ -32,7 +32,7 @@ function loadEnv(string $path): void
     }
 }
 
-loadEnv(__DIR__ . '/.env');
+loadEnv(dirname(__DIR__) . '/.env');
 
 // Gunakan nilai dari .env. Jika belum diisi, pakai placeholder default.
 define('DB_HOST', getenv('DB_HOST') ?: '192.168.1.100');

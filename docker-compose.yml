@@ -19,7 +19,7 @@ services:
   padel-web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: docker/Dockerfile
     container_name: padel-web
     depends_on:
       mysql:
